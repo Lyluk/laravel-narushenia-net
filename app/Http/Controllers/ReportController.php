@@ -9,8 +9,15 @@ use Illuminate\Support\Facades\Auth;
 class ReportController extends Controller
 {
     public function index() {
-        $reports = Report::all();
-        return view('report.index', compact('reports'));
+        $soft = $request->input('sort');
+        if($sort == 'asc' || $sort == 'desc'){
+            $reports = Report::orderBy('created_at', $sort)
+                ->paginate(8);
+        } else {
+            $reports=Report::paginate(8);
+        }
+        $statuses=Status::all();
+        return view('report.index', compact('statuses'));
     }
 
     public function destroy(Report $report) {
